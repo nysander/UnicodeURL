@@ -1,5 +1,5 @@
 module IDNSDK {
-  header "../IDNSDK/IDNSDK.h"
+  header "IDNSDK.h"
   link "IDNSDK"
   export *
 }

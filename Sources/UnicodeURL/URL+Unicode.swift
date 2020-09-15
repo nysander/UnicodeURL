@@ -6,7 +6,7 @@
 import Foundation
 import IDNSDK
 
-extension URL {
+extension URL {  
     /// + (NSURL *)URLWithUnicodeString:(NSString *)str
     static func urlWithUnicodeString(str: String) -> Self {
         /// return [self URLWithUnicodeString:str error:nil];

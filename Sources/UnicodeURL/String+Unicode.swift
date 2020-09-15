@@ -4,6 +4,7 @@
 //  License: MIT (see LICENCE files for details)
 
 import Foundation
+import CoreFoundation
 
 extension String {
     var isValidCharacterSequence: Bool {
@@ -20,14 +21,14 @@ extension String {
 
         for index in 0..<length {
             let c = buffer[index]
-            if CFStringIsSurrogateHighCharacter(UniChar(c)) {
+            if CFStringIsSurrogateHighCharacter(unichar(c)) {
                 if pendingSurrogateHigh {
                     // Surrogate high after surrogate high
                     return false
                 } else {
                     pendingSurrogateHigh = true
                 }
-            } else if CFStringIsSurrogateLowCharacter(UniChar(c)) {
+            } else if CFStringIsSurrogateLowCharacter(unichar(c)) {
                 if pendingSurrogateHigh {
                     pendingSurrogateHigh = false
                 } else {
