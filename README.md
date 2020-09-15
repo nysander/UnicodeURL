@@ -18,4 +18,4 @@ Objective-C code from IFUnicodeURL package was initially transcoded to Swift by 
 
 ## License
 
-UnicodeURL package is licensed under the Apache License 2.0 (see LICENSE file) 
+UnicodeURL package is licensed under the MIT License (see LICENSE file) 
