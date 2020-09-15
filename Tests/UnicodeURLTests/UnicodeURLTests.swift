@@ -95,4 +95,20 @@ final class UnicodeURLTests: XCTestCase {
 
         XCTAssertEqual(decodedDomain, "www..com")
     }
+    
+    static var allTests = [
+        ("testURLWithStringWithNormalDomain", testURLWithStringWithNormalDomain),
+        ("testURLWithUnicodeStringWithNormalDomain", testURLWithUnicodeStringWithNormalDomain),
+        ("testURLWithStringWithJapaneseDomain", testURLWithStringWithJapaneseDomain),
+        ("testURLWithUnicodeStringWithJapaneseDomain", testURLWithUnicodeStringWithJapaneseDomain),
+        ("testURLWithUnicodeStringWithEmojiDomain", testURLWithUnicodeStringWithEmojiDomain),
+        ("testURLWithUnicodeStringWithInvalidLongUnicodeDomain", testURLWithUnicodeStringWithInvalidLongUnicodeDomain),
+        ("testDecodeUnicodeDomainStringWithNormalDomain", testDecodeUnicodeDomainStringWithNormalDomain),
+        ("testDecodeUnicodeDomainStringWithTCO", testDecodeUnicodeDomainStringWithTCO),
+        ("testDecodeUnicodeDomainStringWithJapaneseDomain", testDecodeUnicodeDomainStringWithJapaneseDomain),
+        ("testDecodeUnicodeDomainStringWithEmojiDomain", testDecodeUnicodeDomainStringWithEmojiDomain),
+        ("testDecodeUnicodeDomainStringWithInvalidPunycodeInternational", testDecodeUnicodeDomainStringWithInvalidPunycodeInternational),
+        ("testDecodeUnicodeDomainStringWithInvalidPunycode", testDecodeUnicodeDomainStringWithInvalidPunycode),
+        ("testDecodeUnicodeDomainStringWithInvalidInternationalDomain", testDecodeUnicodeDomainStringWithInvalidInternationalDomain),
+    ]
 }
