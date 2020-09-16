@@ -1,4 +1,4 @@
 module IDNSDK {
-  header "IDNSDK.h"
+  header "xcode.h"
   export *
 }
