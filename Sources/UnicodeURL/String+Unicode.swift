@@ -20,15 +20,15 @@ extension String {
         var pendingSurrogateHigh = false
 
         for index in 0..<length {
-            let c = buffer[index]
-            if CFStringIsSurrogateHighCharacter(unichar(c)) {
+            let c = unichar(truncatingIfNeeded: buffer[index])
+            if CFStringIsSurrogateHighCharacter(c) {
                 if pendingSurrogateHigh {
                     // Surrogate high after surrogate high
                     return false
                 } else {
                     pendingSurrogateHigh = true
                 }
-            } else if CFStringIsSurrogateLowCharacter(unichar(c)) {
+            } else if CFStringIsSurrogateLowCharacter(c) {
                 if pendingSurrogateHigh {
                     pendingSurrogateHigh = false
                 } else {
@@ -72,8 +72,7 @@ extension String {
         var index = self.startIndex
 
         while index != self.endIndex {
-            let set = CharacterSet(charactersIn: "\(self[index])")
-            if chars.isSuperset(of: set) {
+            if chars.contains(self[index]) {
                 break
             }
             index = self.index(index, offsetBy: 1)
@@ -83,5 +82,12 @@ extension String {
             String(self.prefix(upTo: index)),
             String(self.suffix(from: index))
         ]
+    }
+}
+
+extension CharacterSet {
+    func contains(_ character: Character) -> Bool {
+        let string = String(character)
+        return string.rangeOfCharacter(from: self, options: [], range: string.startIndex..<string.endIndex) != nil
     }
 }
