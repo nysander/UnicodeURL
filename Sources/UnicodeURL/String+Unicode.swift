@@ -6,7 +6,7 @@
 import Foundation
 import CoreFoundation
 
-extension String {
+public extension String {
     var isValidCharacterSequence: Bool {
         let length = self.count
         if length == 0 {
