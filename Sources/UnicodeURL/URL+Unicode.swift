@@ -6,49 +6,84 @@
 import Foundation
 import IDNSDK
 
-public extension URL {  
-    /// + (NSURL *)URLWithUnicodeString:(NSString *)str
+public struct UnicodeURLConvertError: Error {
+    public enum ConvertError: Int {
+        case none = 0
+        case STD3NonLDH = 300
+        case STD3Hyphen = 301
+        case alreadyEncoded = 302
+        case invalidDNSLength = 303
+        case cicleCheck = 304
+    }
+
+    public let error: ConvertError
+}
+
+public extension URL {
+
     static func urlWithUnicodeString(str: String) -> Self {
-        /// return [self URLWithUnicodeString:str error:nil];
         return self.urlWithUnicodeString(str: str)
     }
 
-    /// + (NSURL *)URLWithUnicodeString:(NSString *)str error:(NSError **)error
     static func urlWithUnicodeString(str: String) -> Self? {
-        /// return ([str length]) ? [[self alloc] initWithUnicodeString:str error:error] : nil;
         str.count > 0 ? self.init(unicodeString: str) : nil
     }
 
-    /// - (instancetype)initWithUnicodeString:(NSString *)str
     init?(unicodeString string: String) {
-        /// return [self initWithUnicodeString:str error:nil];
         self.init(str: string)
     }
 
     init?(str: String) {
-        if let asciiStr = URL.ConvertUnicodeURLString(str: str, toAscii: true) {
+        do {
+            if let asciiStr = try URL.convertUnicodeURLString(str: str, toAscii: true) {
+                self.init(string: asciiStr)
+            } else {
+                return nil
+            }
+        }
+        catch {
+            return nil
+        }
+    }
+
+    init?(unicodeUrlString string: String) throws {
+        if let asciiStr = try URL.convertUnicodeURLString(str: string, toAscii: true) {
             self.init(string: asciiStr)
-        } else {
+        }
+        else {
             return nil
         }
     }
 
     var unicodeAbsoluteString: String? {
-        return URL.ConvertUnicodeURLString(str: self.absoluteString, toAscii: false)
+        do {
+            return try URL.convertUnicodeURLString(str: self.absoluteString, toAscii: false)
+        }
+        catch {
+            return nil
+        }
     }
 
     var unicodeHost: String? {
-        if let host = self.host {
-            return URL.ConvertUnicodeURLString(str: host, toAscii: false)
+        guard let host = self.host else { return nil }
+        do {
+            return try URL.convertUnicodeURLString(str: host, toAscii: false)
         }
-        return nil
+        catch {
+            return nil
+        }
     }
 
     static func decode(unicodeDomain domain: String) -> String? {
-        return URL.ConvertUnicodeURLString(str: domain, toAscii: false)
+        do {
+            return try URL.convertUnicodeURLString(str: domain, toAscii: false)
+        }
+        catch {
+            return nil
+        }
     }
 
-    static func ConvertUnicodeDomainString(hostname: String, toAscii: Bool) -> String? {
+    static func convertUnicodeDomainString(hostname: String, toAscii: Bool) throws -> String? {
         var inputString = hostname.utf16.compactMap { UInt16(exactly: $0) }
         let inputLength = hostname.lengthOfBytes(using: .utf16) / MemoryLayout<UInt16>.size
 
@@ -83,15 +118,15 @@ public extension URL {
             }
         }
 
-        /// if (error && ret != XCODE_SUCCESS) {
-        ///     *error = [NSError errorWithDomain:kIFUnicodeURLErrorDomain code:ret userInfo:nil];
-        /// }
+        if ret != XCODE_SUCCESS,
+           let error = UnicodeURLConvertError.ConvertError(rawValue: Int(ret)) {
+            throw UnicodeURLConvertError(error: error)
+        }
 
         return hostname
     }
 
-    /// static NSString *ConvertUnicodeURLString(NSString *str, BOOL toAscii, NSError **error)
-    static func ConvertUnicodeURLString(str: String, toAscii: Bool) -> String? {
+    static func convertUnicodeURLString(str: String, toAscii: Bool) throws -> String? {
         guard !str.isEmpty else {
             return nil
         }
@@ -122,7 +157,7 @@ public extension URL {
 
         /// // Now that we have isolated just the hostname, do the magic decoding...
         if let hostnameDecoded = hostname {
-            hostname = URL.ConvertUnicodeDomainString(hostname: hostnameDecoded, toAscii: toAscii)
+            hostname = try URL.convertUnicodeDomainString(hostname: hostnameDecoded, toAscii: toAscii)
         }
         if hostname == nil {
             return nil
