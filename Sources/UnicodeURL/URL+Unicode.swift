@@ -6,13 +6,17 @@
 import Foundation
 import IDNSDK
 
-enum UnicodeURLConvertError: Int {
-    case none = 0
-    case STD3NonLDH = 300
-    case STD3Hyphen = 301
-    case alreadyEncoded = 302
-    case invalidDNSLength = 303
-    case cicleCheck = 304
+public struct UnicodeURLConvertError: Error {
+    public enum ConvertError: Int {
+        case none = 0
+        case STD3NonLDH = 300
+        case STD3Hyphen = 301
+        case alreadyEncoded = 302
+        case invalidDNSLength = 303
+        case cicleCheck = 304
+    }
+
+    public let error: ConvertError
 }
 
 public extension URL {
@@ -114,8 +118,9 @@ public extension URL {
             }
         }
 
-        if ret != XCODE_SUCCESS {
-            throw NSError(domain:"kIFUnicodeURLErrorDomain", code:Int(ret), userInfo:nil)
+        if ret != XCODE_SUCCESS,
+           let error = UnicodeURLConvertError.ConvertError(rawValue: Int(ret)) {
+            throw UnicodeURLConvertError(error: error)
         }
 
         return hostname
