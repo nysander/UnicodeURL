@@ -23,6 +23,22 @@ final class UnicodeURLTests: XCTestCase {
         XCTAssertEqual(url?.unicodeHost, "www.google.com")
     }
 
+    func testURLwithQuestionMark() {
+        let url = URL(str: "http://chilp.it/?77e8fd")
+
+        XCTAssertEqual(url?.unicodeAbsoluteString, "http://chilp.it/?77e8fd")
+        XCTAssertEqual(url?.absoluteString, "http://chilp.it/?77e8fd")
+        XCTAssertEqual(url?.unicodeHost, "chilp.it")
+    }
+
+    func testUnicodeURLwithQuestionMark() {
+        let url = URL(unicodeString: "http://chilp.it/?77e8fd")
+
+        XCTAssertEqual(url?.unicodeAbsoluteString, "http://chilp.it/?77e8fd")
+        XCTAssertEqual(url?.absoluteString, "http://chilp.it/?77e8fd")
+        XCTAssertEqual(url?.unicodeHost, "chilp.it")
+    }
+
     func testURLWithStringWithJapaneseDomain() {
         let url = URL(str: "https://xn--eckwd4c7cu47r2wf.jp")
 
@@ -33,6 +49,7 @@ final class UnicodeURLTests: XCTestCase {
 
     func testURLWithUnicodeStringWithJapaneseDomain() {
         let url = URL(unicodeString: "http://ドメイン名例.jp")
+        
         XCTAssertEqual(url?.unicodeAbsoluteString, "http://ドメイン名例.jp")
         XCTAssertEqual(url?.absoluteString, "http://xn--eckwd4c7cu47r2wf.jp")
         XCTAssertEqual(url?.unicodeHost, "ドメイン名例.jp")
