@@ -19,7 +19,7 @@ jobs:
 
       strategy:
         matrix:
-          swift: ["5.2"]
+          swift: ["5.2", "5.3", "5.4"]
 
       container:
         image: swift:${{ matrix.swift }}
