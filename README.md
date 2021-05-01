@@ -1,5 +1,8 @@
 # UnicodeURL
 
+[![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fnysander%2FUnicodeURL%2Fbadge%3Ftype%3Dswift-versions)](https://swiftpackageindex.com/nysander/UnicodeURL)
+[![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fnysander%2FUnicodeURL%2Fbadge%3Ftype%3Dplatforms)](https://swiftpackageindex.com/nysander/UnicodeURL)
+
 UnicodeURL is package providing extensions for URL which will allow it to support Internationalized domain names in URLs.
 
 This uses code from IDN SDK from Verisign, Inc. The entire IDN SDK source package can be found at [Verisign site]( https://www.verisign.com/en_US/channel-resources/domain-registry-products/idn-sdks/index.xhtml) 
